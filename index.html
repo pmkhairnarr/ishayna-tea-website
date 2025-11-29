@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ishayna Tea - Premium Collection</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="manifest" href="manifest.json">
+    <script src="auth/auth-config.js"></script>
+</head>
+<body>
+    <!-- Authentication Protection -->
+    <div id="auth-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999;">
+        <div id="auth-login" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 8px; max-width: 400px; width: 90%;">
+            <h3 id="auth-title">🔒 Private Access</h3>
+            <p id="auth-message">Enter password to access this content</p>
+            <input type="password" id="auth-password" placeholder="Password" style="width: 100%; padding: 0.75rem; margin: 1rem 0; border: 1px solid #ddd; border-radius: 4px;">
+            <button id="auth-submit" style="width: 100%; padding: 0.75rem; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Access Website</button>
+            <div id="auth-error" style="color: red; margin-top: 1rem; display: none;"></div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <h1>Ishayna Tea - Premium Collection</h1>
+            <p>Data from MCP Test.xlsx</p>
+            <p style="text-align: right;"><button id="auth-logout" style="padding: 0.25rem 0.5rem; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Logout</button></p>
+        </div>
+    </header>
+    
+    <div class="container" id="main-content">
+        <div class="nav-grid">
+            <div class="nav-card">
+                <h3><a href="playersdata.html">PlayersData</a></h3>
+                <p>22 rows, 3 columns</p>
+                <p><strong>Headers:</strong> Name, ID, Comment, , , , , , , , , , , , , , , , , , , , , , , </p>
+                <a href="playersdata.html" class="btn">View Data</a>
+            </div>
+            <div class="nav-card">
+                <h3><a href="matches.html">Matches</a></h3>
+                <p>5 rows, 4 columns</p>
+                <p><strong>Headers:</strong> Matches, Days, Dates, Venue, , , , , , , , , , , , , , , , , , , , , , </p>
+                <a href="matches.html" class="btn">View Data</a>
+            </div>
+            <div class="nav-card">
+                <h3><a href="meetingmgmt.html">MeetingMgmt</a></h3>
+                <p>13 rows, 1 columns</p>
+                <p><strong>Headers:</strong> २२ नोव्हेंबर बैठक नियोजन, , , , , , , , , , , , , , , , , , , , , , , , , </p>
+                <a href="meetingmgmt.html" class="btn">View Data</a>
+            </div>
+            <div class="nav-card">
+                <h3><a href="sportsmgmt.html">SportsMgmt</a></h3>
+                <p>8 rows, 1 columns</p>
+                <p><strong>Headers:</strong> ज्ञान प्रबोधिनी नवनगर विद्यालय, निगडी केंद्र, , , , , , , , , , , , , , , , , , , , , , , , , </p>
+                <a href="sportsmgmt.html" class="btn">View Data</a>
+            </div>
+            <div class="nav-card">
+                <h3><a href="committee.html">Committee</a></h3>
+                <p>33 rows, 6 columns</p>
+                <p><strong>Headers:</strong> क्रमांक, समिती, , प्रमुख, उपप्रमुख, सहाय्यक, , </p>
+                <a href="committee.html" class="btn">View Data</a>
+            </div>
+        </div>
+        
+        <footer style="margin-top: 3rem; text-align: center; color: #666;">
+            <p>Generated from  • 5 sheets • Created 11/29/2025</p>
+        </footer>
+    </div>
+    
+    <script src="assets/script.js"></script>
+    <script src="auth/website-auth.js"></script>
+    <script>
+        // Initialize authentication
+        if (typeof authConfig !== 'undefined') {
+            const auth = new WebsiteAuth(authConfig);
+        }
+    </script>
+</body>
+</html>

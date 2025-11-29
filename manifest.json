@@ -1,0 +1,10 @@
+{
+  "name": "Ishayna Tea - Premium Collection",
+  "short_name": "Ishayna Tea - Premium Collection",
+  "description": "Generated from MCP Test.xlsx",
+  "start_url": "./",
+  "display": "standalone",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "icons": []
+}
