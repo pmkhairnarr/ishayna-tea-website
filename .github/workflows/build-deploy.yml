@@ -1,0 +1,83 @@
+name: Build and Deploy Tea Website
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'data/**'
+      - 'config/**'
+      - 'images/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Clone MCP Server
+      run: |
+        git clone https://github.com/pmkhairnarr/spreadsheet-website-builder-mcp.git mcp-server
+        cd mcp-server
+        npm install
+        
+    - name: Detect Data Source
+      id: data-source
+      run: |
+        if [ -f "data/tea-business.xlsx" ]; then
+          echo "source=excel" >> $GITHUB_OUTPUT
+          echo "file=data/tea-business.xlsx" >> $GITHUB_OUTPUT
+        elif grep -v '^#' data/google-sheets-links.txt | grep -q 'docs.google.com'; then
+          echo "source=google-sheets" >> $GITHUB_OUTPUT
+          echo "file=data/google-sheets-links.txt" >> $GITHUB_OUTPUT
+        else
+          echo "source=none" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Build Website from Excel
+      if: steps.data-source.outputs.source == 'excel'
+      run: |
+        cd mcp-server
+        node -e "
+        import SpreadsheetDataReader from './src/SpreadsheetDataReader.js';
+        import WebsiteGenerator from './src/WebsiteGenerator.js';
+        
+        const reader = new SpreadsheetDataReader();
+        const generator = new WebsiteGenerator('./website-output');
+        
+        const data = await reader.readSpreadsheet('../${{ steps.data-source.outputs.file }}');
+        const config = JSON.parse(require('fs').readFileSync('../config/website-config.json'));
+        
+        await generator.generateWebsite(data, {
+          title: config.website.title,
+          theme: config.website.theme,
+          description: config.project.description + ' - Auto-built from GitHub'
+        });
+        "
+        
+    - name: Build Website from Google Sheets
+      if: steps.data-source.outputs.source == 'google-sheets'
+      run: |
+        echo "Google Sheets build - implement MCP Google Sheets workflow"
+        
+    - name: Deploy to GitHub Pages
+      if: steps.data-source.outputs.source != 'none'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./mcp-server/website-output
+        publish_branch: gh-pages
+        
+    - name: Update Deployment Status
+      run: |
+        echo "Deployment completed at $(date)" > deployment-status.txt
+        echo "Source: ${{ steps.data-source.outputs.source }}" >> deployment-status.txt
+        echo "File: ${{ steps.data-source.outputs.file }}" >> deployment-status.txt
